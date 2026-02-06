@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For My Valentine 💖</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Comic Sans MS', cursive;
+  background:radial-gradient(circle at top,#ffe5ec,#ffc8dd,#ffafcc);
+  overflow:hidden;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(255,255,255,0.5), transparent 60%);
+  animation: glow 6s infinite alternate;
+}
+@keyframes glow{from{opacity:.4}to{opacity:.8}}
+
+section{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:12px;
+  z-index:1;
+}
+.active{display:flex}
+img{width:250px;border-radius:20px}
+
+button{
+  padding:14px 32px;
+  border-radius:40px;
+  border:none;
+  font-size:1.1rem;
+  cursor:pointer;
+}
+#yes{background:#ff4d6d;color:white}
+#no{background:#777;color:white;position:absolute}
+
+.pulse{animation:pulse 1.2s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+
+.hearts{
+  position:fixed;
+  top:-10px;
+  font-size:22px;
+  animation:fall 3s linear forwards;
+}
+@keyframes fall{to{transform:translateY(110vh)}}
+
+.shake{animation:shake .4s}
+@keyframes shake{
+  25%{transform:translateX(-6px)}
+  50%{transform:translateX(6px)}
+}
+.fade-in{opacity:0;animation:fadeIn 3s forwards}
+@keyframes fadeIn{to{opacity:1}}
+</style>
+</head>
+
+<body>
+
+<audio id="roseMusic" loop>
+  <source src="https://www.myinstants.com/media/sounds/christina-perri-a-thousand-years-official-music-video.mp3">
+</audio>
+
+<!-- PAGE 1 -->
+<section id="p1" class="active">
+  <h1>Will you be my Valentine? 🥺</h1>
+  <img src="https://media.tenor.com/9T9S7EaAn_AAAAAi/bubu-dudu-bubu.gif">
+  <div>
+    <button id="yes" onclick="processYes()">YES 💖</button>
+    <button id="no" onmouseover="runNo()">NO 🙄</button>
+  </div>
+  <p id="processing" style="display:none">Checking heart compatibility… 💗</p>
+</section>
+
+<!-- PAGE 2 -->
+<section id="p2">
+  <img id="runGif" src="https://media2.giphy.com/media/wPnbkEcr2tXiTN0Lmq/giphy.gif">
+  <img id="hugGif" src="https://media4.giphy.com/media/IzXiddo2twMmdmU8Lv/giphy.gif" style="display:none">
+  <h1 id="hugText" class="pulse" style="display:none">
+    I knew you would always say YES ❤️
+  </h1>
+</section>
+
+<!-- PAGE 3 – NO DRAMA -->
+<section id="p3">
+  <img src="https://media4.giphy.com/media/JEVqknUonZJWU/giphy.gif">
+  <img src="https://media4.giphy.com/media/l1J9u3TZfpmeDLkD6/giphy.gif">
+  <img src="https://media3.giphy.com/media/eKfpB6WZeKC1DiGrj8/giphy.gif">
+  <h1 class="shake">Did you just try to click NO?! 😤</h1>
+  <p><b>Close this page.</b><br>No more surprises for you.</p>
+</section>
+
+<!-- PAGE 4 -->
+<section id="p4">
+  <p id="waitText">Wait 30 seconds… ⏳</p>
+</section>
+
+<!-- PAGE 5 – ROSE DAY -->
+<section id="p5">
+  <img id="roseGif" src="https://media3.giphy.com/media/wvYNSqBAMDVx8CEYkt/giphy.gif">
+  <h1 id="roseText"></h1>
+  <p id="finalLine" class="fade-in" style="display:none">
+    No matter what day it is… I choose you. 💖
+  </p>
+</section>
+
+<!-- PAGE 6 – APOLOGY -->
+<section id="p6">
+  <h1>I’m so sorry I made you worried… 🥺</h1>
+  <img src="https://media0.giphy.com/media/P53TSsopKicrm/giphy.gif">
+  <img src="https://media2.giphy.com/media/iyfeJqd6NLNK0/giphy.gif">
+  <img src="https://media4.giphy.com/media/eXUlPn1gmZavu/giphy.gif">
+  <p><b>How dare you make me worry?</b><br>
+  Please accept my apology 💞</p>
+</section>
+
+<script>
+const roseMusic=document.getElementById("roseMusic");
+
+function show(n){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("p"+n).classList.add("active");
+}
+
+function runNo(){
+  const b=document.getElementById("no");
+  b.style.left=Math.random()*80+"vw";
+  b.style.top=Math.random()*80+"vh";
+}
+
+function processYes(){
+  document.getElementById("processing").style.display="block";
+  setTimeout(()=>startHug(),1200);
+}
+
+function startHug(){
+  show(2);
+  startHearts();
+  setTimeout(()=>{
+    runGif.style.display="none";
+    hugGif.style.display="block";
+    hugText.style.display="block";
+  },2000);
+  setTimeout(()=>showDrama(),10000);
+}
+
+function showDrama(){
+  show(3);
+  setTimeout(()=>waitPage(),15000);
+}
+
+function waitPage(){
+  show(4);
+  let t=30;
+  const timer=setInterval(()=>{
+    waitText.innerText="Wait "+t+" seconds…";
+    t--;
+    if(t<0){
+      clearInterval(timer);
+      roseDay();
+    }
+  },1000);
+}
+
+function roseDay(){
+  show(5);
+  roseMusic.play().catch(()=>{});
+  typeText(roseText,"HAAAAPPPYYYYYYY ROOOOSEE DAYYYY 🌹💖",()=>{
+    finalLine.style.display="block";
+  });
+  startHearts();
+  roseSequence();
+  setTimeout(()=>show(6),15000);
+}
+
+function startHearts(){
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="hearts";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*100+"vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),3000);
+  },300);
+}
+
+function typeText(el,text,cb){
+  let i=0;
+  el.innerHTML="";
+  const t=setInterval(()=>{
+    el.innerHTML+=text[i++];
+    if(i>=text.length){
+      clearInterval(t);
+      if(cb)cb();
+    }
+  },120);
+}
+
+function roseSequence(){
+  const gifs=[
+    "https://media3.giphy.com/media/hVle3v01CScLyGRe0i/giphy.gif",
+    "https://media3.giphy.com/media/ZeQQIgSMEtGcg4g5PW/giphy.gif"
+  ];
+  let i=0;
+  setInterval(()=>{
+    roseGif.src=gifs[i%gifs.length];
+    i++;
+  },5000);
+}
+</script>
+
+</body>
+</html>
